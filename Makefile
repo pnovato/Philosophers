@@ -1,21 +1,21 @@
-NAME = philo
+NAME = philosophers
 CC = cc
 C_FLAGS = -Wall -Werror -Wextra -g
-PHILO_DIR = ./philo/
+SRC_DIR = ./philo/src/
 OBJ_DIR = ./objs/
-PHILO = main.c
+SRC = main.c 
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
-all : &(NAME)
+all: $(NAME)
 
-$(OBJ_DIR)%.o: $(PHILO_DIR)%.c
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(C_FLAGS) -c $< -o $@
+	@$(CC) $(C_FLAGS) -c $< -o $@ 2>error.txt
 
-$(NAME) : $(OBJ)
+$(NAME): $(OBJ)
 	@echo "building project..."
-	@$(CC) $(C_FLAGS) $(OBJ) -o $(NAME) > /dev/null 2>&1
+	@$(CC) $(C_FLAGS) -o $(NAME) $(OBJ)
 	@echo "Philosophers ready!"
 
 # > /dev/null redireciona o stdout, e nao mostra nada 
@@ -23,12 +23,13 @@ $(NAME) : $(OBJ)
 
 clean:
 	@echo "Executing cleaning..."
-	@rm -rf $(OBJ) > /dev/null 2>&1
+	@rm -rf $(OBJ) > /dev/null 2>&1 > error.txt
 	@echo "Cleaned!"
 
 fclean: clean
 	@echo "Executing full cleaning..."
-	@rm -rf $(NAME) $(OBJ_DIR) > /dev/null 2>&1
+	@rm -f $(NAME) > /dev/null 2>&1
+	@rm -rf $(OBJ_DIR) > /dev/null 2>&1
 	@echo "Full cleaning done!"
 
 re: fclean all
