@@ -7,7 +7,6 @@
 # include <stdint.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include <string.h>
 
 typedef struct s_philo
 {
@@ -33,14 +32,7 @@ typedef struct s_data
 	pthread_mutex_t	print_lock;
 }	t_data;
 
-//time.c
-void    example();
-uint64_t        get_time(void);
-
-//philosophers.c
-//void    philosophers(char **av);
-
-//parsing.c
-t_philo init_philosophers(char **av, int n);
+void	example();
+uint64_t	get_time(void);
 
 #endif
