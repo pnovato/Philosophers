@@ -8,7 +8,6 @@ int main (int ac, char **av)
 		printf("Usage: ./philo n_philo t_die t_eat t_sleep optional[must_eat]\n");
 		return (1);
 	}
-	//philosophers(av);
-	example();
+	//philosophers(ac,av);
 	return (0);
 }

@@ -1,8 +1,8 @@
 #include "../philo.h"
 
-void	philosophers(char **av)
+void	philosophers(int ac, char **av)
 {
-	parse(av);
+	parse(ac,av);
 }
 
 
