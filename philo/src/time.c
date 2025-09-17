@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "../philo.h"
 
 uint64_t	get_time(void)
 {

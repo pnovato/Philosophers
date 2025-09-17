@@ -1,6 +1,7 @@
 NAME = philo
 CC = cc
 C_FLAGS = -Wall -Werror -Wextra -g
+SRC_DIR = ./src/
 OBJ_DIR = ./objs/
 SRC = main.c time.c 
 
@@ -8,7 +9,7 @@ OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
 all: $(NAME)
 
-$(OBJ_DIR)%.o: %.c
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) -c $< -o $@
 
