@@ -1,0 +1,158 @@
+Philosophers...!!
+Regras:
+	-Quando um philo come, nao pode estar pensando e nem dormindo;
+	-Quando esta pensando, nao pode estar comendo e nem dormindo;
+	-Quando esta dormindo, nao pode estar pensando e nem comendo.
+	
+	-Numero de garfos = Numero de philos;
+	
+	-Para um philo comer, precisa de dois garfos
+				|_> Garfo da direita, depois garfo da esquerda.
+				
+	-Quando os philos terminam de comer, pousam os garfos, E VOLTAM A DORMIR;
+	-Quando acordam, COMECAM A PENSAR.
+	
+	-Simulacao para quando UM PHILO morre de fome.
+	
+	-TODO PHILO DEVE COMER, e nao morrer de fome;
+	-PHILOS NAO SE COMUNICAM UNS COM OS OUTROS;
+	-PHILOS NAO SABEM SE O OUTRO VAI MORRER.
+	
+	
+	-Variaveis globais proibidas;
+	-Programa deve ter os seguintes argumentos:
+	number_of_philosophers /time_to_die /time_to_eat /time_to_sleep /[number_of_times_each_philosopher_must_eat]
+	
+	-number_of_philosophers: Numero de philos e de garfos;
+	-time_to_die: Se um filósofo não começou a comer dentro time_to_die milissegundos desde o início de sua última 		
+	refeição ou o início do simulação, morrem;
+	-time_to_sleep: Tempo que um philo passa dormindo;
+	-number_of_times_each_philosopher_must_eat: (Argumento opcional): Se todos filósofos já comeram pelo menos 
+	número_of_times_each_philosopher_must_eat vezes, a simulação pára. Se não for especificado, a simulação pára quando a
+	filósofo morre.
+	
+	
+	-Cada philo tem um numero, que vai de 1 a numero de philos;
+	-O filósofo número 1 fica ao lado do número de filósofo número_de_filosofos(ULTIMO). Qualquer outro filósofo, 
+	numerado N, senta-se entre o filósofo N - 1 e o filósofo N + 1.
+	
+
+LOGS:
+	-Qualquer mudanca de estado de um philo deve estar no seguinte formato:
+		-timestamp_in_ms X has taken a fork;
+		-timestamp_in_ms X is eating;
+		-timestamp_in_ms X is sleeping;
+		-timestamp_in_ms X is thinking;
+		-timestamp_in_ms X died;
+	-Colocar timestamp_in_ms com o carimbo de data/hora atual em milissegundos e X com o número de filósofo;
+	-Uma mensagem de estado exibida não deve se sobrepor a outra mensagem;
+	-Uma mensagem anunciando a morte de um filósofo deve ser exibida dentro de 10 ms de sua morte real.
+	-----------------------------------------------------------
+	-!!--Seu programa não deve ter nenhuma corrida de dados--!!
+	-----------------------------------------------------------
+	
+FUNCOES  AUTORIZADAS:
+	-memset, printf, malloc, free, write,
+	usleep, gettimeofday, pthread_create,
+	pthread_detach, pthread_join, pthread_mutex_init,
+	pthread_mutex_destroy, pthread_mutex_lock,
+	pthread_mutex_unlock
+	
+CONSIDERACOES FINAIS:
+	-Cada filósofo deve ser representado como um fio separado;
+	-Há um garfo entre cada par de filósofos. Portanto, se houver várias filósofos, cada filósofo tem um garfo do lado 
+	esquerdo e um garfo à direita lado. Se houver apenas um filósofo, eles terão acesso a apenas um garfo;
+	-Para evitar que os filósofos dupliquem garfos, você deve proteger o estado de cada garfo com um mutex.
+	
+DEFINICOES:
+	- Uma thread é uma unidade de execução dentro de um processo, que executa instruções do programa e partilha os recursos do processo com outras threads.
+	
+	- Um processo e um programa em execucao.
+	
+	-Processos Cooperativos sao processos que que podem ser afetados e podem afetar outros processos no sitema.
+	Por definicao processos que partilham data(informacao) sao processos cooperativos
+	
+	PQ TER PROCESSOS COOPERATIVOS (IPC- Interprocess communication)? 
+		-Partilha de informacao;
+		-Aceleracao computacional; Um processo pode dividir o seu trabalho em múltiplas threads para permitir 
+		execução concorrente, o que pode resultar em maior rapidez quando as tarefas são independentes e o hardware 
+		permite paralelismo real;
+		-Modularidade;
+		-Conveniencia;
+		
+	Threads podem causar lentidao quando usadas desnecessariamente! Pq?
+		--Paralelismo--: Com threads podemos distribuir a tarefa. Por exemplo duas threads resolvendo o mesmo 
+		problema.
+		Acontece que para haver sincronia, e nao acontecer Concorrencia de dados, temos que usar locks(mutex_lock, 
+		mutex_unlock) oq causa uma maior lentidao no programa, tendo em vista que toda vez que  uma thread vai buscar
+		a tarefa para resolver, precisa verificar se ela esta travada ou destravada(locked ou unlocked);
+		
+		--Concorrencia de dados--: Isso acontece quando varias threads tentam acessar uma variavel ao mesmo tempo,
+		gerando resultados incorretos num intervalo de tempo maior;
+		
+		--Sobreposicao--: Threads quando usadas de forma incorreta, podem gerar outputs com sobreposicao;
+		
+Cada filósofo não guarda referências a outros filósofos.
+Ele só sabe:
+	-quem ele é
+	-quais garfos ele usa
+	-qual é a mesa onde ele está sentado
+
+“Se eu dou acesso a t_table *table na struct de t_philo, vou estar permitindo que filósofos se comuniquem entre si?”  NAO!!
+
+O que é “comunicação entre threads”?
+	Em concorrência, threads comunicam quando:
+		-uma thread altera um dado
+		-outra thread lê esse dado
+		-sem coordenação adequada
+Isso é o que chamamos de shared mutable state sem sincronização.
+Comunicação problemática ≠ acesso a um ponteiro
+Comunicação problemática = acesso concorrente não protegido
+
+O que o ponteiro t_table *table realmente faz?
+	Ele dá acesso a:
+		-dados globais e constantes time_to_die, time_to_eat, n_philos
+		-dados partilhados mas sincronizados, stop (com mutex dead), fork[i].fork (mutex por garfo), last_meal (protegido por eat), print (mutex de stdout)
+Ou seja: não há comunicação direta entre filósofos.
+	-Há coordenação mediada por mutexes, que é exatamente o objetivo do projeto.
+
+Analogia:
+Imagina uma biblioteca:
+	A table é a biblioteca
+	Cada philo é uma pessoa
+	Os forks são livros
+	Os mutexes são regras da biblioteca
+	
+	As pessoas não falam entre si, mas:
+	pegam livros
+	devolvem livros
+	seguem regras comuns
+
+	O ponteiro table não é um telefone entre filósofos.
+	É um mapa do ambiente.
+
+Quando isso SERIA comunicação indevida?
+	Seria um problema se:
+	Um filósofo fizesse:
+
+	table->philos[3].last_meal = ...
+
+	Ou:
+
+	if (table->philos[i].n_meals > ...)
+
+	Isso seria acesso direto ao estado de outro filósofo.
+
+Meu design:
+	-só o empregado percorre table->philos[i]
+	-cada filósofo só mexe no seu próprio t_philo
+
+“Os filósofos não comunicam entre si.
+Eles apenas interagem com recursos partilhados através de mutexes.
+Toda a coordenação acontece via estado global protegido.”
+
+FLUXO:
+	O fluxo saudável é:
+	empregado detecta morte → imprime "died" (uma vez) → set_stop(table)
+	cada dinner verifica should_stop(table) em pontos-chave (e em sleeps controlados) e sai do loop
+	o main faz join no empregado e depois join nos filósofos
