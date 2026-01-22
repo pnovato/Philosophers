@@ -6,17 +6,17 @@
 /*   By: pnovato- <pnovato-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 19:44:14 by pnovato-          #+#    #+#             */
-/*   Updated: 2026/01/21 17:24:02 by pnovato-         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:29:19 by pnovato-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_table *table;
-	pthread_t monitor;
-	int i;
+	t_table		*table;
+	pthread_t	monitor;
+	int			i;
 
 	if (checker_av(ac, av) == 1)
 		return (1);

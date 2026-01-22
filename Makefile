@@ -9,6 +9,8 @@ time.c \
 checker.c \
 parse.c \
 utils.c \
+utils_2.c \
+utils_3.c \
 dinner.c
 
 

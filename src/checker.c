@@ -6,16 +6,16 @@
 /*   By: pnovato- <pnovato-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 19:40:23 by pnovato-          #+#    #+#             */
-/*   Updated: 2026/01/17 22:19:37 by pnovato-         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:37:35 by pnovato-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int checker_av(int ac, char **av)
+int	checker_av(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
-		return (printf("Usage: ./philo n_philo time_to_die time_to_eat time_to_sleep must_eat\n"), 1);
+		return (printf("./philo n_philo t_die t_eat t_sleep n_eat\n"), 1);
 	if (ft_atoi(av[1]) <= 0 || ft_atoi(av[1]) > MAX_PHILOS)
 		return (printf("Error: Invalid number_of_philosophers\n"));
 	if (ft_atoi(av[2]) <= 0 || ft_isnum(av[2]))
@@ -29,11 +29,11 @@ int checker_av(int ac, char **av)
 	return (0);
 }
 
-long ft_atoi(char *str)
+long	ft_atoi(char *str)
 {
-	long result;
-	int sign;
-	int i;
+	long	result;
+	int		sign;
+	int		i;
 
 	result = 0;
 	sign = 1;
@@ -51,9 +51,9 @@ long ft_atoi(char *str)
 	return (result * sign);
 }
 
-int ft_isnum(char *str)
+int	ft_isnum(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)

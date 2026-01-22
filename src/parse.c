@@ -6,30 +6,36 @@
 /*   By: pnovato- <pnovato-@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 22:22:25 by pnovato-          #+#    #+#             */
-/*   Updated: 2026/01/21 17:21:31 by pnovato-         ###   ########.fr       */
+/*   Updated: 2026/01/22 18:19:03 by pnovato-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-t_table *init_t_table(int ac, char **av)
+static int	alloc_table_data(t_table *table)
 {
-	t_table *table;
+	table->philos = malloc(sizeof(t_philo) * table->n_philos);
+	if (!table->philos)
+		return (0);
+	table->fork = malloc(sizeof(t_fork) * table->n_philos);
+	if (!table->fork)
+	{
+		free(table->philos);
+		return (0);
+	}
+	return (1);
+}
+
+t_table	*init_t_table(int ac, char **av)
+{
+	t_table	*table;
 
 	table = malloc(sizeof(t_table));
 	if (!table)
 		return (NULL);
 	table->n_philos = (int)ft_atoi(av[1]);
-	table->philos = malloc(sizeof(t_philo) * table->n_philos);
-	if (!table->philos)
+	if (!alloc_table_data(table))
 	{
-		free(table);
-		return (NULL);
-	}
-	table->fork = malloc(sizeof(t_fork) * table->n_philos);
-	if (!table->fork)
-	{
-		free(table->philos);
 		free(table);
 		return (NULL);
 	}
@@ -43,21 +49,20 @@ t_table *init_t_table(int ac, char **av)
 		table->must_eat = ft_atoi(av[5]);
 	else
 		table->must_eat = -1;
-	// print_table(table);
 	return (table);
 }
 
-int *init_t_philo(t_table *table)
+int	*init_t_philo(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < table->n_philos)
 	{
 		table->philos[i].id_philo = i + 1;
 		table->philos[i].left = i;
-		table->philos[i].right = (i + 1) % table->n_philos; // mesa redonda, ultimo garfo e o garfo da direita do primeiro
-		table->philos[i].n_meals = 0;						// comeca a zero
+		table->philos[i].right = (i + 1) % table->n_philos;
+		table->philos[i].n_meals = 0;
 		table->philos[i].last_meal = get_time_stamp(table);
 		table->philos[i].table = table;
 		if (pthread_mutex_init(&table->fork[i].fork, NULL) != 0)
